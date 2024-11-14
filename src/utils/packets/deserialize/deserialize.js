@@ -1,20 +1,20 @@
 import { config } from '../../../configs/configs.js';
 
-export const deserialize = (socket) => {
-  const messageType = socket.buffer.readUintBE(0, config.packet.messageTypeLength);
-  const versionLength = socket.buffer.readUintBE(
+export const deserialize = (buffer) => {
+  const messageType = buffer.readUintBE(0, config.packet.messageTypeLength);
+  const versionLength = buffer.readUintBE(
     config.packet.messageTypeLength,
     config.packet.versionLength,
   );
   let offset = config.packet.messageTypeLength + config.packet.versionLength;
 
-  const version = socket.buffer.subarray(offset, offset + versionLength).toString();
+  const version = buffer.subarray(offset, offset + versionLength).toString();
   offset += versionLength;
 
-  const sequence = socket.buffer.readUintBE(offset, config.packet.sequenceLength);
+  const sequence = buffer.readUintBE(offset, config.packet.sequenceLength);
   offset += config.packet.sequenceLength;
 
-  const payloadLength = socket.buffer.readUintBE(offset, config.packet.payloadLength);
+  const payloadLength = buffer.readUintBE(offset, config.packet.payloadLength);
   offset += config.packet.payloadLength;
 
   return { messageType, version, sequence, offset, length: offset + payloadLength };

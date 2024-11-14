@@ -1,14 +1,19 @@
 import { config } from '../../configs/configs.js';
+import { MessageType } from '../../constants/header.js';
+import { messageNames } from '../../protobuf/messageNames.js';
 import {
   createS2CMiniGamePlayerSpawnNotification,
   createS2CMiniGamePlayerStartNotification,
 } from '../../utils/packets/notifications/minGame.notification.js';
+import { serialize } from '../../utils/packets/serialize/serialize.js';
+import IntervalManager from '../managers/interval.manager.js';
 
 class Game {
   constructor(id, gameType) {
     this.id = id;
     this.gameType = gameType;
     this.users = [];
+    this.intervalManager = new IntervalManager();
     this.state = config.GAME_OPTIONS.GAME_STATE.WATING;
     this.maxUsers = 4; // TODO: 게임 타입마다 바꿔야함
   }
@@ -19,6 +24,7 @@ class Game {
     }
 
     this.users.push(user);
+    user.gameId = this.id;
 
     // TODO: 임시 테스트용
     if (this.users.length >= this.maxUsers) {
@@ -61,4 +67,27 @@ class Game {
       user.socket.write(miniGameStartNotification);
     });
   }
+
+  getAllLocation(target) {
+    const maxLatency = 0; //this.getMaxLatency();
+
+    const locationData = [];
+    this.users.forEach((user) => {
+      if (user.id !== target.id) {
+        const { x, y, z } = user.calculatePosition(maxLatency);
+        locationData.push({
+          playerId: user.id,
+          position: { x, y, z },
+          hp: 100,
+          state: 1,
+        });
+      }
+    });
+
+    const messageType = MessageType.MINI_GAME_PLAYERS_STATE_SYNC_NOTIFICATION;
+    const messageName = messageNames.gameNotification.S2CMiniGamePlayersStateSyncNotification;
+    return serialize(messageName, messageType, { players: locationData }, target.getNextSequence());
+  }
 }
+
+export default Game;

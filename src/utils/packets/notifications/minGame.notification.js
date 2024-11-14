@@ -1,4 +1,5 @@
 import { MessageType } from '../../../constants/header.js';
+import { messageNames } from '../../../protobuf/messageNames.js';
 import { serialize } from '../serialize/serialize.js';
 
 /**
@@ -12,7 +13,8 @@ import { serialize } from '../serialize/serialize.js';
 export const createS2CMiniGameMoveNotification = (user, playerId, gameType) => {
   const messageType = MessageType.MINI_GAME_MOVE_NOTIFICATION;
   const payload = { playerId, gameType };
-  return serialize(messageType, payload, user.getNextSequence());
+  const messageName = messageNames.gameNotification.S2CMiniGameMoveNotification;
+  return serialize(messageName, messageType, payload, user.getNextSequence());
 };
 
 /**
@@ -28,7 +30,8 @@ export const createS2CMiniGameMoveNotification = (user, playerId, gameType) => {
 export const createS2CMiniGamePlayerSpawnNotification = (user, playerId, position, playerType) => {
   const messageType = MessageType.MINI_GAME_PLAYER_SPAWN_NOTIFICATION;
   const payload = { playerId, position, playerType };
-  return serialize(messageType, payload, user.getNextSequence());
+  const messageName = messageNames.gameNotification.S2CMiniGamePlayerSpawnNotification;
+  return serialize(messageName, messageType, payload, user.getNextSequence());
 };
 
 /**
@@ -40,5 +43,6 @@ export const createS2CMiniGamePlayerSpawnNotification = (user, playerId, positio
 export const createS2CMiniGamePlayerStartNotification = (user) => {
   const messageType = MessageType.MINI_GAME_START_NOTIFICATION;
   const payload = {};
-  return serialize(messageType, payload, user.getNextSequence());
+  const messageName = messageNames.gameNotification.S2CMiniGameStartNotification;
+  return serialize(messageName, messageType, payload, user.getNextSequence());
 };

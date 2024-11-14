@@ -1,8 +1,7 @@
 import { config } from '../../../configs/configs.js';
-import { getProtoTypeNameByMessageType } from '../../../handlers/index.js';
 import { getProtoMessages } from '../../../init/loadProtos.js';
 
-export const serialize = (messageType, payload, sequence) => {
+export const serialize = (messageName, messageType, payload, sequence) => {
   const messageTypeBuffer = Buffer.alloc(config.packet.messageTypeLength);
   messageTypeBuffer.writeUintBE(messageType, 0, config.packet.messageTypeLength);
 
@@ -15,8 +14,7 @@ export const serialize = (messageType, payload, sequence) => {
   sequenceBuffer.writeUintBE(sequence, 0, config.packet.sequenceLength);
 
   const protoMessages = getProtoMessages();
-  const protoTypeName = getProtoTypeNameByMessageType(messageType);
-  const [packageName, typeName] = protoTypeName.split('.');
+  const [packageName, typeName] = messageName.split('.');
   const ProtoMessage = protoMessages[packageName][typeName];
   const payloadBuffer = ProtoMessage.encode(payload).finish();
 

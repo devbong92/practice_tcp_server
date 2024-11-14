@@ -9,7 +9,7 @@ export const onData = (socket) => async (data) => {
 
   while (socket.buffer.length >= config.packet.totalLength) {
     // deserialized
-    const { messageType, version, sequence, offset, length } = deserialize(socket);
+    const { messageType, version, sequence, offset, length } = deserialize(socket.buffer);
 
     // TODO: version check
     // if (!config.client.version.includes(version)) {
