@@ -1,0 +1,16 @@
+syntax = 'proto3';
+
+package game;
+import '../common.proto';
+
+message C2SMiniGameJoinRequest {
+    int32 playerId = 1; 
+}
+
+message C2SMiniGamePlayerMoveRequest {
+    int32 playerId = 1; 
+    int32 hp = 2;
+    Position position = 3; 
+    State state = 4; 
+}
+

@@ -1,0 +1,54 @@
+syntax = 'proto3';
+
+package gameNotification;
+import '../common.proto';
+
+// MINI_GAME_MOVE_NOTIFICATION
+message S2CMiniGameMoveNotification {
+    int32 playerid = 1; 
+    int32 gameType = 2; 
+}
+
+// MINI_GAME_PLAYER_SPAWN_NOTIFICATION
+message S2CMiniGamePlayerSpawnNotification {
+    int32 playerid = 1; 
+    Position position = 2; 
+    int32 playerType = 3;
+}
+
+// MINI_GAME_START_NOTIFICATION
+message S2CMiniGameStartNotification {
+}
+
+// MINI_GAME_PLAYERS_STATE_SYNC_NOTIFICATION
+message S2CMiniGamePlayersStateSyncNotification {
+    repeated PlayerInfo players = 1;
+}
+
+message PlayerInfo {
+    int32 playerId = 1; 
+    Position position = 2; 
+    int32 hp = 3; 
+    State state = 4; 
+}
+
+// MINI_GAME_PLAYER_DEATH_NOTIFICATION
+message S2CMiniGamePlayerDeathNotification {
+    int32 playerId = 1; 
+}
+
+// MINI_GAME_MAP_STATE_SYNC_NOTIFICATION
+message S2CMiniGameMapStateSyncNotification {
+    int32 scale = 1;
+}
+
+// MINI_GAME_OVER_NOTIFICATION
+message S2CMinitGameOverNotification {
+    repeated Rank ranks = 1;
+    int32 endTime = 2; 
+}
+
+message Rank {
+    int32 playerId = 1;
+    int32 rank = 2; 
+}
